@@ -1,0 +1,890 @@
+<!-- v1.0 | 2026-06-23 | 初版建立：人性18法則測驗（6型T1類型卡片）+ 全測驗互引網絡 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>哪條人性一直在操縱你？｜人性18法則 × Mori</title>
+<meta name="description" content="10題純情境測驗，揭示你最難察覺的人性運作模式。不是考你聰不聰明——是找到那條一直在影響你決策的底層人性。"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ── CSS：重置與全域變數 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A0F;--s1:#111118;--s2:#14141F;--s3:#1C1C2A;
+  --border:rgba(255,255,255,.07);--text:#EDEFF5;--muted:#9090A8;
+  --gold:#C4A96A;--gold-l:#E8C86A;--gold-dim:rgba(196,169,106,.14);
+  --r:16px;--ease:.28s cubic-bezier(.4,0,.2,1);
+  --acc:#7055A8;--acc-b:#9070C8;
+  --cM:#7055A8;--cC:#C45858;--cT:#C49A40;
+  --cH:#4E6E9E;--cL:#3E8E78;--cE:#B87830;
+}
+html{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px 60px;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% -8%,rgba(112,85,168,.12) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 95%,rgba(144,112,200,.08) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 30% at 0% 80%,rgba(78,110,158,.07) 0%,transparent 50%)}
+#particles-js{position:fixed;inset:0;z-index:0;pointer-events:none}
+#mori-blobs{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;filter:blur(80px)}
+.mblob{position:absolute;border-radius:50%;mix-blend-mode:screen;will-change:transform}
+.mblob--a{width:65vw;height:65vw;top:-20%;left:-12%;background:radial-gradient(circle,rgba(112,85,168,.18) 0%,transparent 65%);animation:moriDrift 30s ease-in-out infinite}
+.mblob--b{width:55vw;height:55vw;top:10%;right:-16%;background:radial-gradient(circle,rgba(196,88,88,.12) 0%,transparent 65%);animation:moriDrift 30s ease-in-out -11s infinite}
+.mblob--c{width:50vw;height:50vw;bottom:-20%;left:20%;background:radial-gradient(circle,rgba(78,110,158,.1) 0%,transparent 65%);animation:moriDrift 30s ease-in-out -22s infinite}
+@keyframes moriDrift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6%,-4%) scale(1.08)}66%{transform:translate(-4%,6%) scale(.94)}}
+*{cursor:none}
+.cur-dot,.cur-ring{position:fixed;top:0;left:0;pointer-events:none;border-radius:50%;will-change:transform}
+.cur-dot{width:5px;height:5px;background:var(--acc-b);transform:translate3d(-200px,-200px,0) translate(-50%,-50%)}
+.cur-ring{width:28px;height:28px;border:1px solid rgba(144,112,200,.5);background:transparent;transform:translate3d(-200px,-200px,0) translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+.cur-ring.is-locked{width:44px;height:44px;border-color:rgba(144,112,200,.8);background:rgba(144,112,200,.05)}
+.cur-ring.is-down{width:16px;height:16px;background:rgba(144,112,200,.12)}
+#cursor-spotlight{position:fixed;inset:0;pointer-events:none;z-index:1}
+
+/* ── CSS：畫面切換 ── */
+.screen{display:none;width:100%;max-width:680px;position:relative;z-index:2;animation:fadeUp .4s ease both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CSS：歡迎頁 ── */
+.welcome-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:52px 44px;text-align:center}
+.badge-pill{display:inline-block;background:rgba(144,112,200,.08);border:1px solid rgba(144,112,200,.3);color:var(--acc-b);padding:5px 18px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.1em;margin-bottom:24px;text-transform:uppercase}
+.hero-h1{font-size:clamp(26px,4.5vw,42px);font-weight:900;line-height:1.18;margin-bottom:14px;background:linear-gradient(140deg,#fff 20%,var(--gold-l) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:14px;line-height:1.95;margin-bottom:32px;max-width:440px;margin-left:auto;margin-right:auto;color:var(--muted)}
+.stats-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.stat-chip{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:100px;padding:7px 16px;font-size:13px;color:var(--muted)}
+.stat-chip strong{color:var(--gold-l)}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(144,112,200,.2),transparent);margin:8px 0 28px}
+.sym-lbl{font-size:clamp(16px,3vw,19px);font-weight:900;color:var(--text);margin-bottom:8px}
+.sym-hint{font-size:12px;color:var(--muted);margin-bottom:16px}
+.sym-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.sym-item{background:rgba(144,112,200,.04);border:1px solid rgba(144,112,200,.1);border-radius:10px;padding:11px 14px;font-size:13.5px;line-height:1.55;cursor:pointer;transition:var(--ease);display:flex;gap:11px;align-items:flex-start;text-align:left}
+.sym-item:hover{border-color:rgba(144,112,200,.32);background:rgba(144,112,200,.07)}
+.sym-item.picked{border-color:var(--acc-b);background:rgba(144,112,200,.1)}
+.sym-ltr{width:24px;min-width:24px;height:24px;border-radius:5px;background:rgba(144,112,200,.08);border:1px solid rgba(144,112,200,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--acc-b);flex-shrink:0;margin-top:1px;transition:var(--ease)}
+.sym-item.picked .sym-ltr{background:var(--acc-b);border-color:var(--acc-b);color:#0A0A0F}
+.sym-txt{color:var(--muted);transition:var(--ease)}
+.sym-item.picked .sym-txt{color:var(--text)}
+.sym-count{font-size:12px;color:var(--muted);margin-bottom:28px;min-height:20px}
+.btn-gold{display:flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(135deg,var(--acc) 0%,var(--acc-b) 100%);color:#fff;border:none;border-radius:100px;padding:17px 48px;font-size:17px;font-weight:900;cursor:pointer;font-family:'Noto Sans TC',sans-serif;letter-spacing:.02em;width:100%;transition:var(--ease)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(112,85,168,.36)}
+.btn-gold:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ── CSS：測驗頁 ── */
+.quiz-prog-wrap{margin-bottom:14px}
+.quiz-prog-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.prog-dim{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--acc-b);text-transform:uppercase}
+.prog-num{font-size:11px;color:var(--muted)}
+.prog-track{height:2px;background:rgba(144,112,200,.12);border-radius:100px;overflow:hidden;position:relative}
+.prog-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--cM),var(--acc-b));transition:width .5s ease;position:relative}
+.prog-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35) 50%,transparent);animation:shimmer 2.4s ease infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+.quiz-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:32px 32px 24px}
+.q-num{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--acc-b);text-transform:uppercase;margin-bottom:14px}
+.q-text{font-size:clamp(16px,2.8vw,20px);font-weight:700;line-height:1.52;margin-bottom:22px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{background:rgba(144,112,200,.04);border:1px solid rgba(144,112,200,.1);border-radius:10px;padding:13px 15px;cursor:pointer;transition:var(--ease);display:flex;gap:11px;align-items:flex-start;text-align:left}
+.opt:hover{border-color:rgba(144,112,200,.35);background:rgba(144,112,200,.07)}
+.opt.picked{border-color:var(--acc-b);background:rgba(144,112,200,.1)}
+.opt-ltr{width:26px;min-width:26px;height:26px;border-radius:6px;background:rgba(144,112,200,.08);border:1px solid rgba(144,112,200,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--acc-b);flex-shrink:0;margin-top:1px;transition:var(--ease)}
+.opt.picked .opt-ltr{background:var(--acc-b);border-color:var(--acc-b);color:#0A0A0F}
+.opt-txt{font-size:14px;line-height:1.6;color:var(--muted);transition:var(--ease)}
+.opt.picked .opt-txt{color:var(--text)}
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:18px}
+.btn-next{background:transparent;border:1px solid rgba(144,112,200,.22);border-radius:100px;padding:11px 30px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:var(--ease);letter-spacing:.03em}
+.btn-next:not(:disabled):hover{border-color:var(--acc-b);color:var(--acc-b)}
+.btn-next:disabled{opacity:.3;cursor:not-allowed}
+.btn-next.ready{border-color:rgba(144,112,200,.5);color:var(--acc-b)}
+
+/* ── CSS：計算頁 ── */
+#screen-calc .card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:64px 44px;text-align:center}
+.calc-icon{font-size:48px;margin-bottom:24px;animation:float 2.4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0);opacity:.85}50%{transform:translateY(-8px);opacity:1}}
+.calc-title{font-size:22px;font-weight:900;margin-bottom:12px}
+.calc-sub{font-size:13px;color:var(--muted);min-height:22px;transition:opacity .3s}
+.calc-bar-wrap{margin:32px 0 0;height:2px;background:rgba(144,112,200,.1);border-radius:100px;overflow:hidden}
+.calc-bar{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--cM),var(--acc-b));width:0;transition:width .6s ease}
+
+/* ── CSS：問卷解鎖頁 ── */
+.survey-hero{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:40px 36px 32px;text-align:center;position:relative;overflow:hidden}
+.survey-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,var(--type-color-a,#7055A8) 0%,transparent 70%);opacity:.12;pointer-events:none}
+.survey-hero-badge{display:inline-block;padding:4px 14px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;border:1px solid var(--type-color-b,#9070C8);color:var(--type-color-b,#9070C8);background:rgba(255,255,255,.03)}
+.survey-hero-emoji{font-size:48px;margin-bottom:10px;display:block}
+.survey-hero-en{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.survey-hero-zh{font-size:clamp(26px,4.5vw,38px);font-weight:900;line-height:1.15;background:linear-gradient(135deg,#fff 0%,var(--type-color-b,#9070C8) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.survey-hero-motto{font-size:13px;font-style:italic;color:var(--muted);max-width:380px;margin:0 auto}
+.survey-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:32px 36px;margin-top:8px}
+.survey-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc-b);margin-bottom:8px}
+.survey-title{font-size:19px;font-weight:900;margin-bottom:8px}
+.survey-sub{font-size:12.5px;color:var(--muted);line-height:1.8;padding:12px 16px;background:rgba(144,112,200,.04);border:1px solid rgba(144,112,200,.14);border-radius:10px;margin-bottom:24px}
+.survey-q{margin-bottom:20px}
+.survey-q-text{font-size:13.5px;font-weight:700;margin-bottom:10px}
+.survey-opts{display:flex;flex-direction:column;gap:6px}
+.s-opt{background:rgba(144,112,200,.04);border:1px solid rgba(144,112,200,.1);border-radius:9px;padding:10px 14px;cursor:pointer;font-size:13px;color:var(--muted);transition:var(--ease);display:flex;gap:10px;align-items:center}
+.s-opt:hover{border-color:rgba(144,112,200,.3)}
+.s-opt.picked{border-color:var(--acc-b);color:var(--text);background:rgba(144,112,200,.08)}
+.s-dot{width:14px;min-width:14px;height:14px;border-radius:50%;border:1px solid rgba(144,112,200,.3);flex-shrink:0;transition:var(--ease)}
+.s-opt.picked .s-dot{background:var(--acc-b);border-color:var(--acc-b)}
+.survey-result-box{background:rgba(144,112,200,.06);border:1px solid rgba(144,112,200,.2);border-radius:10px;padding:14px 16px;font-size:13.5px;line-height:1.8;color:var(--text);margin:0 0 20px;display:none}
+.survey-result-cta{margin-top:8px;font-weight:700;color:var(--acc-b)}
+.btn-unlock{display:flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(135deg,var(--acc) 0%,var(--acc-b) 100%);color:#fff;border:none;border-radius:100px;padding:16px 48px;font-size:16px;font-weight:900;cursor:pointer;font-family:'Noto Sans TC',sans-serif;width:100%;transition:var(--ease)}
+.btn-unlock:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(112,85,168,.32)}
+.btn-unlock:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ── CSS：結果頁 ── */
+.result-hero{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:44px 36px 36px;text-align:center;position:relative;overflow:hidden}
+.result-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,var(--type-color-a) 0%,transparent 70%);opacity:.15;pointer-events:none}
+.result-badge{display:inline-block;padding:4px 14px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;border:1px solid var(--type-color-b);color:var(--type-color-b);background:rgba(255,255,255,.03)}
+.result-emoji{font-size:56px;margin-bottom:14px;display:block}
+.result-type-en{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.result-type-zh{font-size:clamp(30px,5.5vw,46px);font-weight:900;line-height:1.12;background:linear-gradient(135deg,#fff 0%,var(--type-color-b) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.result-motto{font-size:14px;font-style:italic;color:var(--muted);max-width:380px;margin:0 auto}
+.trait-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;margin-top:8px;display:flex;gap:12px;align-items:flex-start}
+.trait-icon-box{width:38px;min-width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-top:2px}
+.trait-text{font-size:13.5px;color:var(--muted);line-height:1.65}
+.trait-text strong{color:var(--type-color-b)}
+.result-body{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-top:8px}
+.insight-card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:20px 22px;margin-bottom:10px}
+.insight-label{font-size:16px;font-weight:900;color:var(--text);letter-spacing:.01em;margin-bottom:10px}
+.insight-text{font-size:14px;line-height:1.88;color:var(--muted)}
+.mori-box{background:rgba(144,112,200,.05);border:1px solid rgba(144,112,200,.16);border-radius:12px;padding:20px 22px;margin-top:0}
+.mori-lbl{font-size:16px;font-weight:900;color:var(--acc-b);letter-spacing:.01em;margin-bottom:10px}
+.mori-quote{font-size:14px;line-height:1.88;color:var(--muted);font-style:italic}
+.email-wrap{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-top:8px}
+.email-title{font-size:18px;font-weight:900;margin-bottom:6px}
+.email-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7}
+.email-row{display:flex;gap:10px;margin-bottom:8px}
+.email-inp{flex:1;background:rgba(144,112,200,.05);border:1px solid rgba(144,112,200,.2);border-radius:10px;padding:13px 16px;color:var(--text);font-size:14px;outline:none;font-family:'Noto Sans TC',sans-serif;transition:var(--ease)}
+.email-inp:focus{border-color:rgba(144,112,200,.5)}
+.btn-email{background:linear-gradient(135deg,var(--acc),var(--acc-b));color:#fff;border:none;border-radius:10px;padding:13px 22px;font-size:14px;font-weight:900;cursor:pointer;font-family:'Noto Sans TC',sans-serif;white-space:nowrap;transition:var(--ease)}
+.btn-email:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(112,85,168,.3)}
+.btn-skip-email{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;text-decoration:underline;padding:4px 0;display:block;text-align:center;width:100%;transition:var(--ease)}
+.btn-skip-email:hover{color:var(--text)}
+.email-note{font-size:11.5px;color:var(--muted);margin-top:12px;opacity:.55;text-align:center}
+.email-done{font-size:13.5px;color:var(--acc-b);font-weight:700;margin-top:12px;display:none;text-align:center}
+.actions-wrap{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:24px 32px;margin-top:8px}
+.btn-row{display:flex;flex-direction:column;gap:10px}
+.btn-line{display:flex;align-items:center;justify-content:center;gap:10px;background:#06C755;color:#fff;border:none;border-radius:100px;padding:16px 38px;font-size:15px;font-weight:900;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:var(--ease);width:100%}
+.btn-line:hover{box-shadow:0 8px 28px rgba(6,199,85,.35);transform:translateY(-2px)}
+.btn-sec-row{display:flex;gap:10px}
+.btn-ghost-sec{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;background:transparent;border:1px solid rgba(144,112,200,.2);border-radius:100px;padding:12px 10px;font-size:13.5px;font-weight:700;color:var(--muted);cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:var(--ease)}
+.btn-ghost-sec:hover{border-color:rgba(144,112,200,.5);color:var(--acc-b)}
+.btn-retake{display:block;margin:8px auto 0;background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;text-decoration:underline;letter-spacing:.02em}
+.btn-retake:hover{color:var(--text)}
+.matrix-wrap{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:24px 32px;margin-top:8px}
+.matrix-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.matrix-title{font-size:17px;font-weight:900;margin-bottom:6px}
+.matrix-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px}
+.matrix-link{display:flex;align-items:center;gap:10px;background:rgba(144,112,200,.05);border:1px solid rgba(144,112,200,.2);border-radius:10px;padding:12px 16px;text-decoration:none;color:var(--acc-b);font-size:13.5px;font-weight:700;transition:var(--ease)}
+.matrix-link:hover{border-color:var(--acc-b);background:rgba(144,112,200,.1)}
+.matrix-link-icon{font-size:18px}
+.gap{height:8px}
+@media(max-width:480px){
+  .welcome-card{padding:28px 20px}
+  .survey-hero,.survey-card,.result-hero,.trait-card,.result-body,.email-wrap,.actions-wrap,.matrix-wrap{padding-left:20px;padding-right:20px}
+  .quiz-card{padding:24px 20px 20px}
+  .email-row{flex-direction:column}
+  .btn-email{width:100%}
+  .btn-sec-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div id="mori-blobs" aria-hidden="true">
+  <div class="mblob mblob--a"></div>
+  <div class="mblob mblob--b"></div>
+  <div class="mblob mblob--c"></div>
+</div>
+<div id="particles-js"></div>
+<div id="cursor-fx" aria-hidden="true">
+  <div class="cur-ring" id="cur-ring"></div>
+  <div class="cur-dot" id="cur-dot"></div>
+</div>
+<div id="cursor-spotlight"></div>
+
+<!-- 分享圖卡（隱藏） -->
+<div id="share-card-wrap" style="position:fixed;top:-9999px;left:-9999px;pointer-events:none;z-index:-1">
+  <div id="share-card" style="width:600px;height:600px;background:#0A0A0F;font-family:'Noto Sans TC',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:56px 48px;box-sizing:border-box;position:relative;overflow:hidden">
+    <div id="sc-glow" style="position:absolute;inset:0;pointer-events:none"></div>
+    <div id="sc-accent" style="position:absolute;top:0;left:0;right:0;height:3px"></div>
+    <span id="sc-emoji" style="font-size:80px;display:block;margin-bottom:18px;position:relative"></span>
+    <div id="sc-type-en" style="font-size:11px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;position:relative"></div>
+    <div id="sc-type-zh" style="font-size:52px;font-weight:900;color:#FFFFFF;margin-bottom:14px;position:relative;line-height:1.2"></div>
+    <div id="sc-motto" style="font-size:17px;color:#9090A8;line-height:1.7;max-width:400px;font-style:italic;margin-bottom:36px;position:relative"></div>
+    <div style="width:60px;height:1px;background:rgba(144,112,200,.25);margin-bottom:24px;position:relative"></div>
+    <div style="font-size:14px;color:#9070C8;margin-bottom:6px;position:relative">你的人性盲點是哪一種？</div>
+    <div id="sc-url" style="font-size:12px;color:rgba(144,144,168,.6);position:relative"></div>
+    <div style="position:absolute;bottom:22px;right:26px;font-size:12px;font-weight:700;color:#9070C8;opacity:.6">by Mori</div>
+  </div>
+</div>
+<div id="pdf-target" style="position:fixed;top:-9999px;left:-9999px;display:none;pointer-events:none;z-index:-1;width:680px"></div>
+
+<!-- ══ 歡迎頁 ══ -->
+<div id="screen-welcome" class="screen active">
+  <div class="welcome-card">
+    <div class="badge-pill">人性18法則 × Mori 測驗</div>
+    <h1 class="hero-h1">哪條人性<br/>一直在操縱你？</h1>
+    <p class="hero-sub">格林說，人的行為90%是由無意識的人性模式所驅動的。不是你不努力，不是你不聰明——是有一條人性的邏輯，一直在你看不見的地方影響你的選擇。<br/>10題純情境測驗，找出你的底層人性盲點。</p>
+    <div class="stats-row">
+      <span class="stat-chip"><strong>10</strong> 題情境測驗</span>
+      <span class="stat-chip"><strong>6</strong> 種人性盲點</span>
+      <span class="stat-chip">約 <strong>3</strong> 分鐘完成</span>
+    </div>
+    <div class="divider"></div>
+    <div class="sym-lbl">你最有感的狀況是哪個？</div>
+    <div class="sym-hint">選出你認識的感受（可複選，至少選一個）</div>
+    <div class="sym-grid" id="symGrid">
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">A</div><div class="sym-txt">我常常覺得別人「沒有真正看見我的價值」</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">B</div><div class="sym-txt">比別人落後的感覺，會讓我非常難受</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">C</div><div class="sym-txt">我知道要做長遠的事，但就是先做了讓當下好受的</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">D</div><div class="sym-txt">大部分時候我傾向跟著大家走，除非有很強的理由</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">E</div><div class="sym-txt">遇到機會，我習慣先想「如果失敗了怎麼辦」</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">F</div><div class="sym-txt">我有時候覺得，我得到的比我應得的少</div></div>
+    </div>
+    <div class="sym-count" id="symCount">請至少選一個，開始精準診斷</div>
+    <button class="btn-gold" id="startBtn" onclick="startQuiz()" disabled>找出我的人性盲點 →</button>
+  </div>
+</div>
+
+<!-- ══ 測驗頁 ══ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-prog-wrap">
+    <div class="quiz-prog-meta">
+      <span class="prog-dim">人性盲點診斷</span>
+      <span class="prog-num" id="progNum">1 / 10</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:10%"></div></div>
+  </div>
+  <div class="quiz-card">
+    <div class="q-num" id="qNum">Q1</div>
+    <div class="q-text" id="qText"></div>
+    <div class="opts" id="optList"></div>
+    <div class="quiz-nav">
+      <button class="btn-next" id="nextBtn" onclick="nextQ()" disabled>下一題 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 計算頁 ══ -->
+<div id="screen-calc" class="screen">
+  <div class="card">
+    <div class="calc-icon">🧩</div>
+    <div class="calc-title">正在分析你的人性模式</div>
+    <div class="calc-sub" id="calcSub">比對格林《人性18法則》六種核心模式...</div>
+    <div class="calc-bar-wrap"><div class="calc-bar" id="calcBar"></div></div>
+  </div>
+</div>
+
+<!-- ══ 問卷解鎖頁 ══ -->
+<div id="screen-survey" class="screen">
+  <div class="survey-hero" id="surveyHero">
+    <div class="survey-hero-badge">你的人性盲點類型</div>
+    <span class="survey-hero-emoji" id="surveyEmoji"></span>
+    <div class="survey-hero-en" id="surveyTypeEn"></div>
+    <div class="survey-hero-zh" id="surveyTypeZh"></div>
+    <div class="survey-hero-motto" id="surveyMotto"></div>
+  </div>
+  <div class="survey-card">
+    <div class="survey-eyebrow">解鎖完整分析</div>
+    <div class="survey-title">再回答 3 個問題</div>
+    <div class="survey-sub">這不會改變你的類型結果，但可以更精準地了解這條人性如何影響你目前的生活場景，並解鎖個人化的深度分析。</div>
+    <div class="survey-q">
+      <div class="survey-q-text">Q1｜你認為這條人性對你影響最大的領域是？</div>
+      <div class="survey-opts" id="sq1">
+        <div class="s-opt" onclick="pickSurvey('q1','A',this)"><div class="s-dot"></div>職場和工作決策</div>
+        <div class="s-opt" onclick="pickSurvey('q1','B',this)"><div class="s-dot"></div>人際關係和社交</div>
+        <div class="s-opt" onclick="pickSurvey('q1','C',this)"><div class="s-dot"></div>財務和金錢決策</div>
+        <div class="s-opt" onclick="pickSurvey('q1','D',this)"><div class="s-dot"></div>個人目標和習慣</div>
+      </div>
+    </div>
+    <div class="survey-q">
+      <div class="survey-q-text">Q2｜你對「改變這個模式」的狀態是？</div>
+      <div class="survey-opts" id="sq2">
+        <div class="s-opt" onclick="pickSurvey('q2','A',this)"><div class="s-dot"></div>很想改變，需要一個具體的方法</div>
+        <div class="s-opt" onclick="pickSurvey('q2','B',this)"><div class="s-dot"></div>想了解更多，再決定要不要做什麼</div>
+        <div class="s-opt" onclick="pickSurvey('q2','C',this)"><div class="s-dot"></div>先搞清楚這個模式對我的影響</div>
+        <div class="s-opt" onclick="pickSurvey('q2','D',this)"><div class="s-dot"></div>暫時還沒有想要改變的念頭</div>
+      </div>
+    </div>
+    <div class="survey-q" style="margin-bottom:20px">
+      <div class="survey-q-text">Q3｜你目前最主要的生活身份是？</div>
+      <div class="survey-opts" id="sq3">
+        <div class="s-opt" onclick="pickSurvey('q3','A',this)"><div class="s-dot"></div>全職上班族，在考慮是否要發展副業</div>
+        <div class="s-opt" onclick="pickSurvey('q3','B',this)"><div class="s-dot"></div>已經在做副業或自由工作</div>
+        <div class="s-opt" onclick="pickSurvey('q3','C',this)"><div class="s-dot"></div>學生或剛進入職場</div>
+        <div class="s-opt" onclick="pickSurvey('q3','D',this)"><div class="s-dot"></div>其他（創業者、家庭主婦等）</div>
+      </div>
+    </div>
+    <div class="survey-result-box" id="surveyResultBox"></div>
+    <button class="btn-unlock" id="unlockBtn" onclick="unlockResult()" disabled>查看完整分析 →</button>
+  </div>
+</div>
+
+<!-- ══ 結果頁 ══ -->
+<div id="screen-result" class="screen">
+  <div class="result-hero" id="resultHero">
+    <div class="result-badge">人性盲點類型</div>
+    <span class="result-emoji" id="resultEmoji"></span>
+    <div class="result-type-en" id="resultTypeEn"></div>
+    <div class="result-type-zh" id="resultTypeZh"></div>
+    <div class="result-motto" id="resultMotto"></div>
+  </div>
+  <div class="trait-card" id="traitCard">
+    <div class="trait-icon-box" id="traitIcon"></div>
+    <div class="trait-text" id="traitText"></div>
+  </div>
+  <div class="gap"></div>
+  <div class="result-body">
+    <div class="insight-card">
+      <div class="insight-label">你的人性運作模式</div>
+      <div class="insight-text" id="insightPattern"></div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-label">這條人性的底層根源</div>
+      <div class="insight-text" id="insightRoot"></div>
+    </div>
+    <div class="insight-card" style="margin-bottom:0">
+      <div class="insight-label">格林給你的對策</div>
+      <div class="insight-text" id="insightFix"></div>
+    </div>
+  </div>
+  <div class="gap"></div>
+  <div class="result-body" style="padding:24px 32px">
+    <div class="mori-box">
+      <div class="mori-lbl">Mori 觀點</div>
+      <div class="mori-quote" id="moriQuote"></div>
+    </div>
+  </div>
+  <div class="gap"></div>
+  <div class="matrix-wrap" id="matrixSection">
+    <div class="matrix-label">人性漏斗 · 延伸診斷</div>
+    <div class="matrix-title" id="matrixTitle"></div>
+    <div class="matrix-sub" id="matrixSub"></div>
+    <a class="matrix-link" id="matrixLink" href="#" target="_blank">
+      <span class="matrix-link-icon" id="matrixIcon"></span>
+      <span id="matrixLinkText"></span>
+    </a>
+  </div>
+  <div class="gap"></div>
+  <div class="email-wrap">
+    <div class="email-title">領取你的人性盲點完整報告</div>
+    <div class="email-sub">輸入 Email，Mori 把針對你這個類型的深度解析和格林建議的具體對策整理給你。</div>
+    <div class="email-row">
+      <input class="email-inp" type="email" id="emailInp" placeholder="你的 Email"/>
+      <button class="btn-email" onclick="submitEmail()">發送給我</button>
+    </div>
+    <button class="btn-skip-email" onclick="skipEmail()">跳過，直接下載 PDF</button>
+    <div class="email-note">不發廣告，只發一封你的人性分析報告。隨時可取消訂閱。</div>
+    <div class="email-done" id="emailDone">✓ 已送出！報告會在幾分鐘內寄到你的信箱。</div>
+  </div>
+  <div class="gap"></div>
+  <div class="actions-wrap">
+    <div class="btn-row">
+      <button class="btn-line" onclick="openLine()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.27 2 11.5c0 3.688 2.167 6.91 5.407 8.734L6.5 22l3.077-1.602A11.15 11.15 0 0012 20.5c5.523 0 10-4.27 10-9S17.523 2 12 2zm-3.5 11.5h-1a.5.5 0 010-1h.5V10h-.5a.5.5 0 010-1h1a.5.5 0 01.5.5v3.5a.5.5 0 01-.5.5zm2.5.5a.5.5 0 01-.5-.5v-4a.5.5 0 011 0v2.794l2-2.587A.5.5 0 0114 9v4a.5.5 0 01-1 0v-2.794l-2 2.587A.5.5 0 0111 13.5zm5.5 0h-2a.5.5 0 01-.5-.5V9.5a.5.5 0 011 0V13h1v-1.5a.5.5 0 011 0V13h.5a.5.5 0 010 1H16zm0-5h-2a.5.5 0 010-1h2a.5.5 0 010 1z"/></svg>
+        追蹤 LINE@
+      </button>
+      <div class="btn-sec-row">
+        <button class="btn-ghost-sec" onclick="openIG()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          追蹤 IG
+        </button>
+        <button class="btn-ghost-sec" onclick="downloadPDF()" id="dlBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          下載 PDF
+        </button>
+      </div>
+      <div class="btn-sec-row">
+        <button class="btn-ghost-sec" id="shareBtn" onclick="shareResult()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          分享結果
+        </button>
+        <button class="btn-ghost-sec" onclick="copyResult()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          複製文字
+        </button>
+      </div>
+      <button class="btn-retake" onclick="retake()">重新測驗</button>
+    </div>
+  </div>
+</div><!-- /screen-result -->
+
+<script>
+/* ── JS：全域設定 ── */
+const CFG = {
+  lineUrl: 'https://line.me/R/ti/p/@507wvwbz',
+  igUrl:   'https://instagram.com/mori1024_',
+  /* 本機預覽無效，需真實環境才能運作 */
+  mlKey:   '',
+  mlGroup: { M:'', C:'', T:'', H:'', L:'', E:'' },
+};
+
+/* ── JS：全域狀態 ── */
+let currentQ=0, picked=null, answers=[], finalType='';
+let surveyAnswers={q1:'',q2:'',q3:''};
+let symPicked=new Set();
+
+/* ── JS：題庫（純情境題，防止聰明作答） ── */
+const QS=[
+  { text:'你在一個重要會議上分享了一個想法，沒有人有反應。你最自然的第一個念頭是？', opts:[
+    {t:'M', txt:'他們大概還不夠了解這個想法的深度'},
+    {t:'C', txt:'我想起另一個同事提過類似的想法，那次大家反應很好'},
+    {t:'T', txt:'算了，下次再找機會說，這場合不對'},
+    {t:'H', txt:'也許這個場合本來就不適合這種討論'},
+    {t:'L', txt:'我不應該說出來，說錯了被留下印象怎麼辦'},
+    {t:'E', txt:'這個團隊不太懂欣賞真正有遠見的想法'},
+  ]},
+  { text:'你幫了一個朋友一個很大的忙，幾個月後他沒有再主動提起這件事。你的感受是？', opts:[
+    {t:'M', txt:'有點失落，覺得自己的付出沒有被他真正看見'},
+    {t:'C', txt:'想到另一個朋友，他幫忙後對方一直很感激他'},
+    {t:'T', txt:'當下有點不舒服，後來也就算了忘了'},
+    {t:'H', txt:'也許對他來說，這件事沒有我想的那麼重要，每個人表達感謝的方式不同'},
+    {t:'L', txt:'下次要想清楚再出手，避免讓自己白費力氣'},
+    {t:'E', txt:'這種人根本不懂得珍惜別人的幫助'},
+  ]},
+  { text:'你看到一個和你差不多背景的人，最近取得了一個你也想要的成果。你的第一反應？', opts:[
+    {t:'M', txt:'希望他能看到你這段時間也一直在努力什麼'},
+    {t:'C', txt:'想算一下他花了多少時間，你和他的差距在哪裡'},
+    {t:'T', txt:'被刺激到，想馬上做點什麼讓自己也開始動'},
+    {t:'H', txt:'研究他用什麼方法，大家認可的方式應該有它的道理'},
+    {t:'L', txt:'擔心自己是不是已經落後太多了，還來得及嗎'},
+    {t:'E', txt:'他得到的，比他真正付出的應得的，多了一點'},
+  ]},
+  { text:'你正在執行一個需要長期堅持的計畫，今天特別累，有個輕鬆的選擇出現了。你會？', opts:[
+    {t:'T', txt:'基本上選輕鬆的那個，今天先休息，明天再繼續'},
+    {t:'L', txt:'認真想一下，不做今天計畫的部分會損失什麼'},
+    {t:'M', txt:'想一下如果別人知道你今天的選擇，他們會怎麼看你'},
+    {t:'H', txt:'看看其他有類似計畫的人，他們怎麼處理這種狀況'},
+    {t:'C', txt:'想到那些還在堅持的人，用這個逼自己撐下去'},
+    {t:'E', txt:'既然已經付出了這麼多，偶爾讓自己休息是應該的'},
+  ]},
+  { text:'在一個群體討論中，大多數人都同意某個方向，但你有不同的看法。你會？', opts:[
+    {t:'H', txt:'重新審視自己的想法——那麼多人同意，也許我漏掉了什麼'},
+    {t:'M', txt:'說出來，我能看見別人沒注意到的角度'},
+    {t:'C', txt:'先觀察誰說話最有份量，看他是什麼立場'},
+    {t:'L', txt:'猶豫是否要說——說錯了在這個群體留下不好的印象'},
+    {t:'E', txt:'說出來，這種時候就是需要有人說不一樣的'},
+    {t:'T', txt:'不太想在這個場合花力氣，等之後找機會再說'},
+  ]},
+  { text:'你得到的認可比你預期的少（例如主管沒有特別注意到你的努力）。你的感覺是？', opts:[
+    {t:'E', txt:'我做了那麼多，這個結果不合理'},
+    {t:'C', txt:'立刻想到某個同事，他的貢獻應該比你少，但好像更被看見'},
+    {t:'L', txt:'比起完全被忽略，這樣至少沒有變更糟'},
+    {t:'M', txt:'失望，覺得你真正的能力和價值沒有被看到'},
+    {t:'H', txt:'也許你對自己投入的程度高估了，或者表達方式有問題'},
+    {t:'T', txt:'當下很難受，但後來繼續做就好，不想花太多精力在這上面'},
+  ]},
+  { text:'你在網路上遇到一個強烈批評你觀點的留言。你的第一反應是？', opts:[
+    {t:'M', txt:'想知道為什麼這個人要這樣說，他是不是針對你'},
+    {t:'C', txt:'看他有多少人支持他的觀點'},
+    {t:'T', txt:'衝動上來，很想馬上回他'},
+    {t:'H', txt:'看看其他人也這樣覺得嗎，評估是不是我哪裡真的說錯了'},
+    {t:'L', txt:'先觀望，擔心回應之後反而讓情況更難收拾'},
+    {t:'E', txt:'這個人沒有足夠的背景和資格來評論這件事'},
+  ]},
+  { text:'你剛加入一個新的環境（新公司、新社群）。你最先注意到自己在做什麼？', opts:[
+    {t:'H', txt:'觀察這裡的規則和氣氛，然後慢慢調整自己的行為'},
+    {t:'M', txt:'思考怎麼讓這裡的人盡快知道你擅長什麼'},
+    {t:'C', txt:'評估這裡誰最有成果，和他的差距在哪裡'},
+    {t:'T', txt:'找一個能讓自己快點有歸屬感的方式'},
+    {t:'L', txt:'謹慎行事，避免太早做什麼讓人留下不好的印象'},
+    {t:'E', txt:'評估這個環境能給你帶來什麼，值不值得你投入'},
+  ]},
+  { text:'你做了一個決定，結果比你預期的差。你事後最自然的解釋是？', opts:[
+    {t:'M', txt:'這個環境或其他人的因素，讓這個決定的執行變得更困難'},
+    {t:'C', txt:'那個時候換成別人，大概也會做一樣的選擇'},
+    {t:'T', txt:'當時的判斷是基於那個瞬間，沒有辦法完全預測後來的發展'},
+    {t:'H', txt:'那是當時大多數人都認可的方向，只是這次運氣不太好'},
+    {t:'L', txt:'後悔當初沒有更仔細評估風險'},
+    {t:'E', txt:'以我當時掌握的資訊和能力，做這個決定是完全合理的'},
+  ]},
+  { text:'在一個完全陌生的場合，沒有人認識你。你對這個狀況的感受最接近哪個？', opts:[
+    {t:'M', txt:'有點不適應，這裡的人還不知道你是誰'},
+    {t:'C', txt:'自動開始觀察這裡誰「最重要」或最有影響力'},
+    {t:'T', txt:'先找一件能讓你立刻覺得舒服或有事做的事'},
+    {t:'H', txt:'先觀察這裡的潛規則，不想在不了解的情況下犯錯'},
+    {t:'L', txt:'謹慎，先別做什麼會讓人留下負面印象的事'},
+    {t:'E', txt:'雖然沒人認識你，但你知道自己的能力不會因此改變'},
+  ]},
+];
+
+/* ── JS：類型資料 ── */
+const TYPES={
+  M:{emoji:'🪞',en:'The Mirror Trap',zh:'鏡像陷阱型',
+    motto:'你看見的「他人」，其實大多是你自己的投影',
+    color:'#7055A8',colorB:'#9070C8',
+    trait:{icon:'👁️',bg:'rgba(112,85,168,.15)',text:'你的底層驅動是<strong>被看見的需求</strong>——你對他人的反應高度敏感，但這個敏感往往是圍繞著「他們怎麼看我」，而不是「他們真正是誰」。'},
+    pattern:'你無意識地把別人當成鏡子——期待他們反映出你希望被看見的樣子。當他們沒有做到，你容易感到被忽視或不公平對待。你對別人行為的解讀常常先通過「這件事和我的關係是什麼」這個濾鏡，這讓你容易錯讀他人的動機，也讓你的人際關係帶有一種隱性的「功能性期待」。',
+    root:'格林在《人性18法則》說，自戀是人類的底層程式之一——每個人都有程度不一的「自我中心偏見」。鏡像陷阱型的核心問題是：你對他人的注意力，其實大部分是指向自己的。你的共情是真實的，但它常常停在「他的感受和我有什麼關係」的層面，而不是真正進入「他真正是誰、他在乎什麼」的深度。',
+    fix:'格林建議的解方是「深度共情練習」：當你對某人感到不滿或失望時，先問「如果我完全是他，這件事對他意味著什麼？」把他的背景、他的壓力、他的動機都想一遍，再做判斷。這不是要你壓抑自己的感受，而是讓你的解讀更接近現實，而不是你的投影。',
+    mori:'把別人的行為通通解讀成「針對我」或「沒有尊重我」，是一種很消耗能量的運作方式。更省力的做法是：先假設他們和你一樣，都在自己的故事裡努力——他們的行為通常不是針對你的，只是他們的應激反應。',
+    matrix:{title:'配對測驗：你的暗黑心智是哪一種？',sub:'鏡像陷阱型和評價式、自我否定式心智模式高度相關。做暗黑心智測驗，看看這條人性如何影響你更深層的自我評判系統。',link:'https://mori1024studio.github.io/mindfuck-quiz/',icon:'🧠',linkText:'→ 前往暗黑心智測驗'}
+  },
+  C:{emoji:'📊',en:'The Comparison Addict',zh:'比較中毒型',
+    motto:'你衡量自己的尺，永遠在別人手上',
+    color:'#C45858',colorB:'#D87070',
+    trait:{icon:'⚖️',bg:'rgba(196,88,88,.15)',text:'你的自我評估系統以<strong>相對值</strong>為主——不是你在哪裡，而是你相對於某某人在哪裡。這個比較機器是全自動的，你幾乎停不下來。'},
+    pattern:'你的自我評估以「相對值」運作——不是你走了多遠，而是你比某某人多走了還是少走了多少。這種比較是自動的：它在你看朋友社群的時候開啟，在你聽到同事升職的時候開啟，在你進入任何社交場合的時候也開啟。它給你動力，也給你很多不必要的痛苦，而且讓你的滿足感永遠是條件式的。',
+    root:'格林說，嫉妒是人類最難承認、卻最普遍的情緒之一。它的機制很有趣：你對一個和你「夠像」的人有著更強的比較衝動——不是比較馬斯克，而是比較你的同學、同事、同齡朋友。比較中毒型最大的風險是：你的目標在別人更新之前你才感到滿足，但別人的目標從來不會停下來等你。',
+    fix:'格林建議的解方是「歷史比較」而非「橫向比較」——把自己的今天和自己的過去比，而不是和別人的現在比。同時，識別你的「比較觸發點」（哪類貼文、哪類對話讓你立刻啟動比較模式），然後在那個時刻刻意暫停三秒，問自己：「這件事和我自己的目標有什麼關係？」',
+    mori:'比較沒問題——問題是你把它當成唯一的評量標準。用別人的速度衡量你的進度，你永遠在追一個你無法控制的目標。你的成長速度需要一個獨立的基準，不是社群上那個一直移動的平均值。',
+    matrix:{title:'配對測驗：你的金錢人格是哪一種？',sub:'比較中毒型在財務場景裡最常表現為攀比型消費。做金錢人格測驗，看看這條人性如何影響你的財務決策模式。',link:'https://mori1024studio.github.io/wealth-mindset-quiz/',icon:'💰',linkText:'→ 前往金錢人格測驗'}
+  },
+  T:{emoji:'⚡',en:'The Short-term Hijack',zh:'短期接管型',
+    motto:'你的「現在的我」一直在透支「未來的我」的資源',
+    color:'#C49A40',colorB:'#D8B050',
+    trait:{icon:'⏱️',bg:'rgba(196,154,64,.15)',text:'你的大腦在<strong>即時獎勵和未來收益</strong>之間，幾乎總是選即時的。不是因為你不知道長遠很重要——是因為「未來」在那個當下感覺不夠真實。'},
+    pattern:'你的大腦在面對即時的滿足和未來的好處之間，幾乎總是選即時的。不是因為你不知道長期規劃很重要——你很清楚——而是在那個當下，未來的代價感覺遙遠，現在的好處感覺真實。這讓你在決策、習慣建立、情緒管理上，常常在事後感到後悔，然後再次循環。',
+    root:'格林指出，人類天生有「雙曲貼現」的傾向——越近的事物感覺越重要、越有份量，越遠的事物越抽象。短期接管型的問題不是缺乏自律，而是大腦的預設設定就是這樣。了解這個機制，是改變它的第一步——因為如果你以為問題是「意志力不夠」，你就會一直用錯方法去對付它。',
+    fix:'格林的建議是把「未來的自己」具象化：不要抽象地想「以後的我」，而是具體描述那個情境——「明天早上我坐在咖啡廳裡，看著昨晚完成的事，我的感覺是什麼？」讓未來的代價在現在感覺更真實，比靠意志力更有效。同時，設計讓衝動行為多走幾步才能執行的系統。',
+    mori:'短期感覺好是真實的，不需要否認它。問題是「現在的我」一直在替「未來的我」借錢——而且是利率很高的那種。設計一個在衝動那一刻需要多幾個步驟的系統，往往比試圖說服自己「不要這樣做」有效十倍。',
+    matrix:{title:'配對測驗：你的習慣為什麼一直斷掉？',sub:'短期接管型是習慣斷裂最核心的驅動力。做原子習慣測驗，找出你的行為鏈在哪個環節最容易被「即時感受」劫持。',link:'https://mori1024studio.github.io/atomic-habits-quiz/',icon:'🔗',linkText:'→ 前往原子習慣斷點測驗'}
+  },
+  H:{emoji:'🌊',en:'The Hidden Conformist',zh:'隱性服從型',
+    motto:'你以為你在獨立思考，但環境的手一直在那裡',
+    color:'#4E6E9E',colorB:'#6888B8',
+    trait:{icon:'👥',bg:'rgba(78,110,158,.15)',text:'你的決策比你意識到的更多地被<strong>「周圍的人怎麼做」</strong>所形塑。這不是弱點——是人類演化最強大的生存機制之一，只是它在現代社會有時候指錯了方向。'},
+    pattern:'你的決策和判斷，比你意識到的更多地被「周圍的人怎麼做」所形塑。這不是因為你沒有主見，而是人類大腦天生有「社會效度」機制——如果很多人都這樣做，這件事應該是對的或安全的。你的從眾行為通常是無意識的，事後才被理性包裝成「這是我仔細考慮過的決定」。',
+    root:'格林說，服從群體是人類演化出來最強大的生存機制之一。但在現代，這個機制常常讓你做出不完全符合自己真實想法的選擇——從買什麼、相信什麼，到職涯的方向。最危險的不是明顯的從眾，而是那種你完全沒有意識到在發生的隱性服從。',
+    fix:'訓練「延遲贊同」的習慣：當你發現自己第一個反應是「大家都這樣做所以應該對」，先暫停，給自己24-48小時獨立思考這個問題。格林特別強調，在群體情緒高漲的時刻（恐慌、興奮、憤怒），更需要刻意與集體判斷拉開距離——因為那正是隱性服從最容易在你不知不覺中運作的時刻。',
+    mori:'大部分時候你做的選擇，都帶著你沒有意識到的「社會指令」。這不是弱點，是人的設計。但了解它之後，你就有機會在每一個重要決策上問一個問題：「如果沒有人看見，我會怎麼選？」',
+    matrix:{title:'配對測驗：壓力下你的哪個影子冒出來？',sub:'隱性服從型在壓力情境下往往會有特定的影子功能被觸發。做 MBTI 壓力影子測驗，看看你在被群體壓力影響時，會展現出哪一面。',link:'https://mori1024studio.github.io/mbti-shadow-quiz/',icon:'🎭',linkText:'→ 前往 MBTI 壓力影子測驗'}
+  },
+  L:{emoji:'🔐',en:'The Loss Bound',zh:'損失綁架型',
+    motto:'你做的每一個「不要」，都有一份你沒有算到的代價',
+    color:'#3E8E78',colorB:'#56A890',
+    trait:{icon:'🛑',bg:'rgba(62,142,120,.15)',text:'你對「失去」的恐懼，比「得到同等事物的渴望」更強烈。這讓你在決策上天然傾向保守，機會成本極高——你知道你錯過了什麼，但感覺不到那份代價。'},
+    pattern:'你對「失去」的恐懼，比「得到同等事物的渴望」更強烈。這在你的決策裡表現為：你對退出的行動比對進入的行動更謹慎，你在評估機會時先算風險，你容易因為「不想失去已有的」而繼續做你其實不應該繼續做的事——這就是心理學上的沉沒成本效應。',
+    root:'損失規避是行為經濟學最有力的發現之一。格林指出，從演化的角度，失去的代價比等值收益的快感要高出大約兩倍——這個比例已經寫在大腦裡了。問題是，在大多數現代情境裡，這個比例讓你做出過度保守的選擇，錯過了實際上風險可接受的機會。',
+    fix:'格林建議的做法是「90歲後悔測試」：不問「這件事如果失敗了我會怎樣」，而問「如果我90歲回頭看，我更後悔的是做了這件事，還是沒有做？」這個換角度的問法，能讓你把「不作為的代價」具象化，讓你的決策更平衡——因為你的大腦天生只計算「做了」的風險，不計算「沒做」的風險。',
+    mori:'你對損失的敏感度是一種保護，但它在面對新機會和改變時，常常是你前進的隱形煞車。試著把「不做」也算成一個選擇——它同樣有代價，只是那個代價比較模糊、比較遠、比較容易被你的大腦忽略。',
+    matrix:{title:'配對測驗：你現在在財富的哪一層？',sub:'損失綁架型在財務決策上的影響最直接——它讓你卡在某一個財富層無法往上走。做財富階梯測驗，找出你的精確位置。',link:'https://mori1024studio.github.io/wealth-ladder/',icon:'🪜',linkText:'→ 前往財富階梯測驗'}
+  },
+  E:{emoji:'👑',en:'The Entitlement Core',zh:'資格崇拜型',
+    motto:'你確信你值得，但你和世界定義的「值得」不一樣',
+    color:'#B87830',colorB:'#D09040',
+    trait:{icon:'💎',bg:'rgba(184,120,48,.15)',text:'你有一個根深蒂固的感受：以你的能力和付出，你<strong>應該得到</strong>超出實際的對待或認可。這個感受本身不是問題——問題是當它變成「外部世界欠我的」心態時，它就從動力變成了障礙。'},
+    pattern:'你有一個根深蒂固的感受：以你的能力、貢獻或背景，你應該得到超出你實際得到的對待、機會或認可。這不一定是傲慢，有時它安靜地藏在你的失望、委屈，或者你對他人行為的評判裡。它讓你很難接受「平等」的待遇，因為你的內部標準並不是「平等」。',
+    root:'格林說，資格感源於一種「我和他人不一樣」的隱性信念。這個信念本身沒有問題——每個人都需要自我價值感。問題是當它變成「外部世界欠我的」心態時，它就從驅動力變成了障礙。資格崇拜型的盲點是：他們常常對「得到的」關注不夠，對「沒得到的」關注過多，這讓他們很難從已有的資源中創造最大價值。',
+    fix:'格林建議的做法是「感激稽核」——每週固定問自己：「我這週得到了什麼，是我有意或無意期待但沒有算進去的？」這個練習的目的不是要你降低標準，而是要讓你更清楚看見實際得到的東西，平衡你對「應得」的感受。同時，問自己：「我現在能用已有的創造什麼？」',
+    mori:'相信自己有能力和價值，是必要的。但「我應該得到更多」這個想法，有時候是最有效率的一種屏蔽——它讓你專注在沒有的，而不是善用已經有的。真正有影響力的人很少覺得世界欠他們，因為他們在忙著創造。',
+    matrix:{title:'配對測驗：你的「不夠好」從哪裡來？',sub:'資格崇拜型常常和完美主義型、表現綁架型共存——都是「我應該更好」邏輯的不同表達。做不夠好測驗，看看你的底層自我評估模式。',link:'https://mori1024studio.github.io/not-enough-quiz/',icon:'🔓',linkText:'→ 前往不夠好測驗'}
+  },
+};
+
+/* ── JS：歡迎頁 ── */
+function pickSym(el){
+  el.classList.toggle('picked');
+  const ltr=el.querySelector('.sym-ltr').textContent;
+  if(el.classList.contains('picked')) symPicked.add(ltr); else symPicked.delete(ltr);
+  const n=symPicked.size;
+  document.getElementById('symCount').textContent=n>0?`已選 ${n} 個感受`:'請至少選一個，開始精準診斷';
+  document.getElementById('startBtn').disabled=n===0;
+}
+
+/* ── JS：測驗主流程 ── */
+function startQuiz(){ show('screen-quiz'); renderQ(); }
+function renderQ(){
+  const q=QS[currentQ];
+  document.getElementById('qNum').textContent=`Q${currentQ+1}`;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('progNum').textContent=`${currentQ+1} / ${QS.length}`;
+  document.getElementById('progFill').style.width=`${((currentQ+1)/QS.length)*100}%`;
+  const letters='ABCDEF';
+  document.getElementById('optList').innerHTML=q.opts.map((o,i)=>`
+    <div class="opt" onclick="pickOpt(this,'${o.t}')">
+      <div class="opt-ltr">${letters[i]}</div>
+      <div class="opt-txt">${o.txt}</div>
+    </div>`).join('');
+  picked=null;
+  const btn=document.getElementById('nextBtn');
+  btn.disabled=true; btn.classList.remove('ready');
+  btn.textContent=currentQ<QS.length-1?'下一題 →':'查看結果 →';
+}
+function pickOpt(el,type){
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('picked'));
+  el.classList.add('picked'); picked=type;
+  const btn=document.getElementById('nextBtn');
+  btn.disabled=false; btn.classList.add('ready');
+}
+function nextQ(){
+  if(!picked) return;
+  answers.push(picked);
+  if(currentQ<QS.length-1){ currentQ++; renderQ(); } else { doCalc(); }
+}
+
+/* ── JS：計分邏輯 ── */
+function doCalc(){
+  show('screen-calc');
+  const msgs=['比對格林《人性18法則》六種核心模式...','分析你的情境決策模式...','定位你的人性盲點驅動...','生成個人化人性診斷報告...'];
+  let mi=0;
+  const subEl=document.getElementById('calcSub'), barEl=document.getElementById('calcBar');
+  const iv=setInterval(()=>{
+    mi++; if(mi<msgs.length){ subEl.style.opacity=0; setTimeout(()=>{subEl.textContent=msgs[mi];subEl.style.opacity=1;},150); }
+    barEl.style.width=`${Math.min(mi*28,95)}%`;
+  },700);
+  setTimeout(()=>{
+    clearInterval(iv); barEl.style.width='100%';
+    const scores={M:0,C:0,T:0,H:0,L:0,E:0};
+    answers.forEach(t=>{if(scores[t]!==undefined)scores[t]++;});
+    let best=null,bestScore=-1;
+    ['M','C','T','H','L','E'].forEach(k=>{if(scores[k]>bestScore){bestScore=scores[k];best=k;}});
+    finalType=best;
+    setTimeout(()=>showSurvey(),400);
+  },3200);
+}
+
+/* ── JS：問卷解鎖頁 ── */
+function showSurvey(){
+  const t=TYPES[finalType];
+  const hero=document.getElementById('surveyHero');
+  hero.style.setProperty('--type-color-a',t.color);
+  hero.style.setProperty('--type-color-b',t.colorB);
+  document.getElementById('surveyEmoji').textContent=t.emoji;
+  document.getElementById('surveyTypeEn').textContent=t.en;
+  document.getElementById('surveyTypeZh').textContent=t.zh;
+  document.getElementById('surveyMotto').textContent=t.motto;
+  show('screen-survey');
+  trackResponse({quiz:'laws-of-human-nature',result:t.zh});
+}
+function pickSurvey(q,val,el){
+  document.querySelectorAll(`#s${q} .s-opt`).forEach(o=>o.classList.remove('picked'));
+  el.classList.add('picked');
+  surveyAnswers[q]=val;
+  if(surveyAnswers.q1&&surveyAnswers.q2&&surveyAnswers.q3){
+    revealSurveyResult();
+    document.getElementById('unlockBtn').disabled=false;
+  }
+}
+function revealSurveyResult(){
+  const {q1,q2,q3}=surveyAnswers;
+  let msg='',cta='';
+  const seg=q2==='A'&&(q3==='A'||q3==='B')?'partner':
+             q2==='A'||q2==='B'?'warm':
+             q2==='D'?'cold':'curious';
+  if(seg==='partner'){ msg='你有清楚的改變意願，也已經在行動中。你需要的不是更多道理，是一個系統性的方法讓你對抗這條人性。'; cta='加入 LINE@，我們討論你的具體情況 →'; }
+  else if(seg==='warm'){ msg='你在了解和行動之間。先把今天的診斷結果消化，你會找到對你最有意義的切入點。'; cta='追蹤 IG，每週一個對抗人性的方法 →'; }
+  else if(seg==='cold'){ msg='了解人性模式本身就是第一步。不一定要馬上改變什麼，先看清楚這條人性在你生活裡的具體表現。'; cta='追蹤 IG，每週一個人性觀察 →'; }
+  else { msg='好奇心是最好的開始。你的人性診斷結果可以幫你看見一些你平常沒有意識到的模式。'; cta='追蹤 IG，更多格林框架的實踐 →'; }
+  const el=document.getElementById('surveyResultBox');
+  el.innerHTML=`<div>${msg}</div><div class="survey-result-cta">${cta}</div>`;
+  el.style.display='block';
+  trackResponse({quiz:'laws-of-human-nature',result:TYPES[finalType].zh,...surveyAnswers,segment:seg});
+}
+function unlockResult(){ showResult(); }
+
+/* ── JS：結果頁渲染 ── */
+function showResult(){
+  const t=TYPES[finalType];
+  const hero=document.getElementById('resultHero');
+  hero.style.setProperty('--type-color-a',t.color);
+  hero.style.setProperty('--type-color-b',t.colorB);
+  document.getElementById('resultEmoji').textContent=t.emoji;
+  document.getElementById('resultTypeEn').textContent=t.en;
+  document.getElementById('resultTypeZh').textContent=t.zh;
+  document.getElementById('resultMotto').textContent=t.motto;
+  const traitCard=document.getElementById('traitCard');
+  traitCard.style.background=t.trait.bg;
+  traitCard.style.borderColor=t.color+'44';
+  document.getElementById('traitIcon').textContent=t.trait.icon;
+  document.getElementById('traitIcon').style.background=t.trait.bg;
+  document.getElementById('traitText').innerHTML=t.trait.text;
+  document.getElementById('insightPattern').textContent=t.pattern;
+  document.getElementById('insightRoot').textContent=t.root;
+  document.getElementById('insightFix').textContent=t.fix;
+  document.getElementById('moriQuote').textContent=t.mori;
+  document.getElementById('matrixTitle').textContent=t.matrix.title;
+  document.getElementById('matrixSub').textContent=t.matrix.sub;
+  document.getElementById('matrixLink').href=t.matrix.link;
+  document.getElementById('matrixIcon').textContent=t.matrix.icon;
+  document.getElementById('matrixLinkText').textContent=t.matrix.linkText;
+  show('screen-result');
+}
+
+/* ── JS：Email（本機預覽無效，需真實環境才能運作） ── */
+async function submitEmail(){
+  const email=document.getElementById('emailInp').value.trim();
+  if(!email||!email.includes('@')) return;
+  document.getElementById('emailDone').style.display='block';
+  document.getElementById('emailInp').disabled=true;
+  trackResponse({quiz:'laws-of-human-nature',result:TYPES[finalType].zh,...surveyAnswers,email});
+  if(CFG.mlKey&&CFG.mlGroup[finalType]){
+    try{
+      await fetch('https://connect.mailerlite.com/api/subscribers',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+CFG.mlKey},
+        body:JSON.stringify({email,groups:[CFG.mlGroup[finalType]]})
+      });
+    }catch(e){}
+  }
+}
+function skipEmail(){ downloadPDF(); }
+/* 本機預覽無效，需真實環境（Cloudflare Worker） */
+function trackResponse(data){
+  try{fetch('https://quiz-tracker.mori1024.workers.dev/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),keepalive:true}).catch(()=>{})}catch(e){}
+}
+
+/* ── JS：社群 / 分享 / PDF ── */
+function openLine(){ window.open(CFG.lineUrl,'_blank'); }
+function openIG()  { window.open(CFG.igUrl,'_blank'); }
+function loadScript(src){ return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);}); }
+
+async function generateShareCanvas(){
+  const t=TYPES[finalType];
+  document.getElementById('sc-emoji').textContent=t.emoji;
+  document.getElementById('sc-type-en').textContent=t.en;
+  document.getElementById('sc-type-zh').textContent=t.zh;
+  document.getElementById('sc-motto').textContent=t.motto;
+  document.getElementById('sc-url').textContent=window.location.href.replace(/^https?:\/\//,'');
+  document.getElementById('sc-glow').style.background=`radial-gradient(circle at 50% 35%,${t.color}28,transparent 60%)`;
+  document.getElementById('sc-accent').style.background=`linear-gradient(90deg,transparent,${t.colorB},transparent)`;
+  if(!window.html2canvas){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }
+  return await html2canvas(document.getElementById('share-card'),{scale:2,useCORS:true,backgroundColor:'#0A0A0F',logging:false,width:600,height:600});
+}
+async function shareResult(){
+  const btn=document.getElementById('shareBtn'),orig=btn.innerHTML;
+  btn.innerHTML='⏳ 生成中…'; btn.disabled=true;
+  try{
+    const canvas=await generateShareCanvas();
+    const dataUrl=canvas.toDataURL('image/png');
+    if(navigator.share&&navigator.canShare){
+      const blob=await (await fetch(dataUrl)).blob();
+      const file=new File([blob],'人性盲點_'+TYPES[finalType].zh+'.png',{type:'image/png'});
+      if(navigator.canShare({files:[file]})){
+        await navigator.share({files:[file],title:'人性18法則測驗',text:'我的人性盲點是「'+TYPES[finalType].zh+'」\n'+TYPES[finalType].motto+'\n\n'+window.location.href});
+        return;
+      }
+    }
+    const link=document.createElement('a');
+    link.download='人性盲點_'+TYPES[finalType].zh+'.png';
+    link.href=dataUrl;
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  }catch(e){ if(e.name!=='AbortError') alert('圖片生成失敗，請截圖儲存。'); }
+  finally{ btn.innerHTML=orig; btn.disabled=false; }
+}
+function copyResult(){
+  const t=TYPES[finalType];
+  const text=`【人性18法則測驗結果】\n類型：${t.zh}（${t.en}）\n${t.motto}\n\nMori 觀點：${t.mori}\n\n→ 測一測你的人性盲點：${window.location.href}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=event.target.closest('button'),orig=btn.innerHTML;
+    btn.innerHTML='✓ 已複製';
+    setTimeout(()=>btn.innerHTML=orig,2000);
+  }).catch(()=>{});
+}
+
+/* ── JS：PDF（全 inline style，不依賴 CSS 變數） ── */
+function buildPDFHTML(t){
+  const traitHtml=t.trait.text.replace(/<strong>/g,`<strong style="color:${t.colorB}">`);
+  return `<div style="background:#0A0A0F;font-family:'Noto Sans TC',sans-serif;width:680px;box-sizing:border-box;padding-bottom:40px">
+  <div style="height:4px;background:linear-gradient(90deg,${t.color},${t.colorB})"></div>
+  <div style="padding:40px 44px 32px;text-align:center">
+    <div style="display:inline-block;padding:4px 14px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1px solid ${t.colorB};color:${t.colorB};margin-bottom:18px">人性盲點類型</div>
+    <div style="font-size:56px;margin-bottom:12px">${t.emoji}</div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:6px">${t.en}</div>
+    <div style="font-size:40px;font-weight:900;color:#FFFFFF;margin-bottom:10px;line-height:1.2">${t.zh}</div>
+    <div style="font-size:14px;font-style:italic;color:#9090A8;max-width:380px;margin:0 auto;line-height:1.7">${t.motto}</div>
+  </div>
+  <div style="margin:0 32px 12px;background:${t.trait.bg};border:1px solid ${t.color}66;border-radius:14px;padding:18px 22px;display:flex;gap:14px;align-items:flex-start">
+    <div style="font-size:22px;flex-shrink:0;margin-top:2px">${t.trait.icon}</div>
+    <div style="font-size:13px;color:#9090A8;line-height:1.75">${traitHtml}</div>
+  </div>
+  <div style="margin:0 32px 12px;background:#14141F;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:24px 26px">
+    <div style="margin-bottom:20px"><div style="font-size:16px;font-weight:900;color:#EDEFF5;margin-bottom:10px">你的人性運作模式</div><div style="font-size:13.5px;color:#9090A8;line-height:1.88">${t.pattern}</div></div>
+    <div style="margin-bottom:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.05)"><div style="font-size:16px;font-weight:900;color:#EDEFF5;margin-bottom:10px">這條人性的底層根源</div><div style="font-size:13.5px;color:#9090A8;line-height:1.88">${t.root}</div></div>
+    <div style="padding-top:18px;border-top:1px solid rgba(255,255,255,.05)"><div style="font-size:16px;font-weight:900;color:#EDEFF5;margin-bottom:10px">格林給你的對策</div><div style="font-size:13.5px;color:#9090A8;line-height:1.88">${t.fix}</div></div>
+  </div>
+  <div style="margin:0 32px;background:rgba(144,112,200,.05);border:1px solid rgba(144,112,200,.18);border-radius:14px;padding:24px 26px">
+    <div style="font-size:16px;font-weight:900;color:#9070C8;margin-bottom:10px">Mori 觀點</div>
+    <div style="font-size:13.5px;color:#9090A8;line-height:1.88;font-style:italic">${t.mori}</div>
+  </div>
+  <div style="text-align:center;padding:22px 44px 0"><div style="font-size:10px;color:rgba(144,144,168,.3);letter-spacing:.04em">人性18法則測驗 by Mori｜人性盲點診斷</div></div>
+</div>`;
+}
+async function downloadPDF(){
+  const btn=document.getElementById('dlBtn'),orig=btn.innerHTML;
+  btn.innerHTML='⏳ 產生中…'; btn.disabled=true;
+  const target=document.getElementById('pdf-target');
+  try{
+    if(!window.html2canvas){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }
+    const t=TYPES[finalType];
+    target.innerHTML=buildPDFHTML(t);
+    target.style.display='block';
+    await new Promise(r=>setTimeout(r,150));
+    const canvas=await html2canvas(target,{scale:2,useCORS:true,backgroundColor:'#0A0A0F',logging:false,width:680,windowWidth:680});
+    target.style.display='none';
+    let ok=false;
+    try{
+      if(!window.jspdf){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); }
+      const {jsPDF}=window.jspdf;
+      const w=210,h=Math.ceil(w*(canvas.height/canvas.width));
+      const pdf=new jsPDF({unit:'mm',format:[w,h],orientation:'portrait'});
+      pdf.addImage(canvas.toDataURL('image/jpeg',.93),'JPEG',0,0,w,h);
+      pdf.save(`人性盲點報告_${t.zh}.pdf`); ok=true;
+    }catch(e){}
+    if(!ok){
+      const a=document.createElement('a'); a.download=`人性盲點_${t.zh}.png`; a.href=canvas.toDataURL('image/png');
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+  }catch(e){ target.style.display='none'; alert('產生失敗，請截圖儲存。'); }
+  finally{ btn.innerHTML=orig; btn.disabled=false; }
+}
+
+/* ── JS：重測 ── */
+function retake(){
+  currentQ=0;picked=null;answers=[];finalType='';
+  surveyAnswers={q1:'',q2:'',q3:''};
+  symPicked.clear();
+  document.querySelectorAll('.sym-item').forEach(el=>el.classList.remove('picked'));
+  document.getElementById('symCount').textContent='請至少選一個，開始精準診斷';
+  document.getElementById('startBtn').disabled=true;
+  document.getElementById('emailInp').value='';
+  document.getElementById('emailInp').disabled=false;
+  document.getElementById('emailDone').style.display='none';
+  document.getElementById('surveyResultBox').style.display='none';
+  document.getElementById('unlockBtn').disabled=true;
+  document.querySelectorAll('.s-opt').forEach(el=>el.classList.remove('picked'));
+  show('screen-welcome');
+}
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ── JS：Cursor ── */
+(function(){
+  const hp=window.matchMedia?.('(pointer: fine)').matches;
+  const nm=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if(!hp||nm) return;
+  const ring=document.getElementById('cur-ring'),dot=document.getElementById('cur-dot'),spot=document.getElementById('cursor-spotlight');
+  let sx=-200,sy=-200,rx=-200,ry=-200;
+  window.addEventListener('mousemove',e=>{
+    sx=e.clientX;sy=e.clientY;
+    dot.style.transform=`translate3d(${sx}px,${sy}px,0) translate(-50%,-50%)`;
+    spot.style.background=`radial-gradient(200px at ${sx}px ${sy}px,rgba(144,112,200,.1),transparent 70%)`;
+    const active=e.target instanceof Element&&!!e.target.closest('a,button,[role="button"],input,.sym-item,.opt,.s-opt');
+    ring.classList.toggle('is-locked',active);
+  },{passive:true});
+  window.addEventListener('mousedown',()=>ring.classList.add('is-down'),{passive:true});
+  window.addEventListener('mouseup',()=>ring.classList.remove('is-down'),{passive:true});
+  (function loop(){rx+=(sx-rx)*.16;ry+=(sy-ry)*.16;ring.style.transform=`translate3d(${rx}px,${ry}px,0) translate(-50%,-50%)`;requestAnimationFrame(loop);})();
+})();
+
+/* ── JS：Particles ── */
+window.addEventListener('load',()=>{
+  if(window.particlesJS) particlesJS('particles-js',{
+    particles:{number:{value:28,density:{enable:true,value_area:1000}},color:{value:'#9070C8'},shape:{type:'circle'},
+      opacity:{value:.12,random:true,anim:{enable:true,speed:.5,opacity_min:.03,sync:false}},size:{value:1.5,random:true},
+      line_linked:{enable:true,distance:180,color:'#7055A8',opacity:.05,width:.8},
+      move:{enable:true,speed:.4,direction:'none',random:true,out_mode:'out'}},
+    interactivity:{detect_on:'canvas',events:{onhover:{enable:true,mode:'repulse'},onclick:{enable:false}},modes:{repulse:{distance:70,duration:.4}}},
+    retina_detect:true,
+  });
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</body>
+</html>
